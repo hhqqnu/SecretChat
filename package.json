@@ -1,0 +1,22 @@
+{
+  "name": "secretchat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tom",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "formidable": "^1.0.17",
+    "mongoose": "^4.4.10",
+    "multer": "^1.1.0",
+    "socket.io": "^1.4.5",
+    "util": "^0.10.3"
+  }
+}

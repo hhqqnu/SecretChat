@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>登录页</title>
+  <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
+   <!--[if lt IE 9]>
+      <script src="/public/js/html5shiv.min.js"></script>
+      <script src="/public/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    #loginDiv{
+     
+    }
+    #loginDivFooter{
+      text-align: right;
+    }
+    </style>
+</head>
+<body>
+<div class="container" >
+  <div class="panel panel-success" id="loginDiv">
+    <div class="panel-heading">登录</div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="userName">用户名：</label>
+        <input class="form-control" id="userName" v-on:keyup.enter="login" v-model="username">
+      </div>
+      <div class="form-group">
+        <label for="userPwd">密码:</label>
+        <input class="form-control" type="password" id="userPwd"  v-on:keyup.enter="login" v-model="password"/>
+      </div>
+    </div>
+    <div class="panel-footer" id="loginDivFooter">
+      <button class="btn btn-primary" id="btnSubmit" v-on:click="login">登录</button>
+      <label><a href="/user/register">注册</a></label>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/public/js/jquery-1.11.1.min.js"></script>
+<script src="/public/js/bootstrap.js"></script>
+<script src="/public/js/vue.min.js"></script>
+<script>
+new Vue({
+  el:'#loginDiv',
+  data:{
+    username:'tom',
+    password:'1'
+  },
+  methods:{
+    login:function(){
+      if(!this.username||!this.password){
+        alert('用户名或密码不能为空');
+        return;
+      }
+      $.post('/login',{userName:this.username,userPwd:this.password},function(json){
+        if(json.error){
+          alert(json.error);
+          return;
+        }
+       window.location.assign('/');
+      });
+    }
+  }
+});
+</script>
+</html>

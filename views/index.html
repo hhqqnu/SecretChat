@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>主页</title>
+  <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
+   <!--[if lt IE 9]>
+      <script src="/public/js/html5shiv.min.js"></script>
+      <script src="/public/js/respond.min.js"></script>
+    <![endif]-->
+  <link rel="stylesheet" type="text/css" href="/public/css/skin.css">
+</head>
+<body id="roomList">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#" style="color:#50E3C2;font-size:26px;">私密房间</a>
+        </div>
+      <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li data-toggle="modal" data-target="#createRoom"><a href="#">创建房间</a></li>
+            <li><a href="#">我的收藏</a></li>
+            <li><a href="#about" id="userid"><%=userid%></a></li>
+            <li><a href="/logout">注销</a></li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container containerRooms">
+    <div class="room" v-for="room in rooms">
+       <room :message="room"></room>
+    </div>
+  </div>
+  <!-- 创建房间 -->
+<div class="modal fade" id="createRoom" tabindex="-1" role="dialog" aria-labelledby="createRoomLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="createRoomLabel">创建房间</h4>
+      </div>
+      <div class="modal-body">
+      <!-- <form action="/room" enctype="multipart/form-data" method="post" v-on:submit="addRoom"> -->
+          <div class="form-group">
+            <label for="roomTitle">房间名称：</label>
+            <input type="text" class="form-control"  id="roomTitle" name="roomTitle" v-model="room.roomName">
+          </div>
+          <div class="form-group">
+            <label for="roomContent">房间内容：</label>
+            <textarea class="form-control" id="roomContent" name="roomContent" v-model="room.roomContent"></textarea>
+          </div>
+          <!-- <div class="form-group">
+            <label for="roomImg">房间图片:</label>
+            <input type="file" id="roomImg" name="roomImg" class="form-control">
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" v-on:click="addRoom">保存</button>
+        </div>
+      <!-- </form> -->
+    </div>
+  </div>
+</div>
+ <!-- 聊天房间 -->
+<div class="modal fade" id="joinRoom" tabindex="-1" role="dialog" aria-labelledby="joinRoomLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="closeRoom"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="joinRoomLabel"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="chatContent">
+          <div class="chatLeft" id="chatLeft">
+          </div>
+          <div class="joinPeosDiv">
+            <ul class="joinPeoList">
+              <li v-for="u in users">{{u}}</li>
+            </ul>
+          </div> 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="sendMessageDiv">
+          <div>
+            <div class="input-group">
+              <span class="input-group-addon">消息内容:</span>
+              <input type="text" class="form-control" aria-describedby="basic-addon1" v-model="messageBody" v-on:keyup.enter="sendMessage">
+            </div>
+          </div>
+          <div class="sendMessageBtnDiv">
+            <button type="button" class="btn btn-primary" v-on:click="sendMessage">发送</button>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+</div>
+<div class="alert alert-success" role="alert" id="onlineAlert"></div>
+<div class="alert alert-danger" role="alert" id="offlineAlert"></div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/public/js/jquery-1.11.1.min.js"></script>
+<script src="/public/js/bootstrap.js"></script>
+<script src="/public/js/vue.min.js"></script>
+<script>
+var socket = io.connect(),from =$('#userid').text();
+socket.on('online',function(data){
+  if(data.curRoomId == curRoomId){
+    if (data.user != from) {
+      vRoom.users.push(data.user);
+      onlineAlert.text('欢迎'+data.user+'加入.').show();
+      setTimeout(function(){
+        onlineAlert.hide();
+      },1000);
+    }
+  }
+});
+socket.on('offline',function(data){
+  if(data.curRoomId == curRoomId){
+    if(data.user != from){
+      vRoom.users.$remove(data.user);
+      offlineAlert.text('很遗憾，'+data.user+'离开').show();
+      setTimeout(function(){
+        offlineAlert.hide();
+      },1000);
+    }
+  }
+});
+socket.on('say',function(data){
+  if(data.curRoomId == curRoomId){
+    if(data.user != from){
+      chatLeft.append('<div class="chatLeftOther"><div class="chatLeftOtherPeo">'+data.user+'</div><div class="chatLeftOtherContent">'+data.messageBody+'</div></div>');
+    }
+  }
+});
+
+var joinRoom = $('#joinRoom'),joinRoomLabel=$('#joinRoomLabel'),curRoomId,
+onlineAlert=$('#onlineAlert'),offlineAlert=$('#offlineAlert'),chatLeft=$('#chatLeft');
+Vue.component('room',{
+  props:['message'],
+  methods:{
+    selectRoom:function(){
+      chatLeft.empty();
+      curRoomId = this.message._id;
+      joinRoomLabel.text(this.message.roomName);
+      joinRoom.modal('toggle');
+      socket.emit('online', {user: from,curRoomId:curRoomId});
+      vRoom.getUsers();
+    }
+  },
+  template: '<div class="room"><div class="room-header"><div class="room-header-back"></div><div class="room-header-content"><div>{{message.roomName}}</div><div><span class="glyphicon glyphicon-plus-sign" v-on:click="selectRoom"></span></div></div></div><div class="room-body"><img src="/public/imgs/0.png"><div class="room-text">{{message.roomContent}}</div></div><div class="room-footer"><div class="room-footer-back"></div><div class="room-footer-content"><div class="room-peos">参与：<span>{{message.roomJoinPeos}}人</span></div><div><span class="glyphicon glyphicon-heart"></span></div> </div></div></div>'
+});
+var vRoom = new Vue({
+  el:'#joinRoom',
+  data:{
+    users:[],
+    messageBody:''
+  },
+  methods:{
+    upUsers:function(data){
+      this.users = [];
+      var us = [];
+      for(var u in data){
+        us.push(u);
+      }
+      this.users = us;
+    },
+    getUsers:function(){
+      $.get('/room/users/'+curRoomId,function(data){
+        this.upUsers(data);
+      }.bind(this));
+    },
+    sendMessage:function(){
+        if(this.messageBody){
+          chatLeft.append(' <div class="chatLeftOwenr"><div class="chatLeftOwenrPeo">'+from+'</div><div class="chatLeftOwenrContent">'+this.messageBody+'</div></div>');
+          socket.emit('say',{toObj:'all',messageBody:this.messageBody,curRoomId:curRoomId,user:from});
+          this.messageBody='';
+        }
+    },
+    closeRoom:function(){
+        socket.emit('offline',{curRoomId:curRoomId,user:from});
+        curRoomId = '';
+    }
+  }
+})
+var v = new Vue({
+  el:'#roomList',
+  data:{
+    rooms:[],
+    room:{
+      roomName:'',
+      roomContent:''
+    }
+  },
+  methods:{
+    getRoomList:function(){
+      $.get('/list',function(json){
+        var data = json.data;
+        for(var i =0; i<data.length; i++){
+          this.rooms.push(data[i]);
+        }
+      }.bind(this));
+    },
+    addRoom:function(e){
+      if(!this.room.roomName){
+        alert('房间名称不能为空！');
+        //e.preventDefault();
+        //return false;
+        return;
+      }
+      $.post('/room',{roomName:this.room.roomName,roomContent:this.room.roomContent},function(json){
+        if(json.error){
+          alert(json.error);
+          return;
+        }
+        var data = json.data;
+        if(data.roomName){
+          this.rooms.push(data);
+        }
+        $('#createRoom').modal('toggle');
+      }.bind(this));
+      //return true;
+    }
+  }
+});
+v.getRoomList();
+</script>
+</html>

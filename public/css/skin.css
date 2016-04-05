@@ -1,0 +1,200 @@
+ .containerRooms{
+        display:flex;
+        justify-content: center;
+        margin-top: 70px;
+        flex-wrap: wrap;
+      }
+      .room {
+        width: 215px;
+        height: 269px;
+        border: 1px solid #ccc;
+        background:linear-gradient(to left top,rgba(202,228,156,100),rgba(80,227,194,100));
+        position: relative;
+        box-shadow:2px 2px #dff0d8;
+        margin-bottom: 20px;margin-right: 20px;
+      }
+      .room-header {
+        position: relative;
+        height: 40px;line-height: 40px;
+      }
+
+    
+      .room-footer{
+        position: absolute;
+        bottom: 0;height: 40px;
+        line-height: 40px;
+        width: 100%;
+      }
+      .room-footer-content,.room-header-content{
+         position: absolute;height: 40px;width: 100%;
+         z-index: 11;
+         font-size: 18px;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;padding-left: 10px;padding-right: 10px;
+         text-shadow: 1px 1px #ccc;
+      }
+      .room-header-back,.room-footer-back{
+        background-color: #fff;
+        position: absolute;
+        opacity: 0.5;
+        filter: alpha(opacity=0.5);
+        -ms-filter:'progid:DXImageTransform.Microsoft.Alpha(Opacity=50)';
+        filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+        height: 40px;width: 100%;
+      }
+      .room-body{
+        position: absolute;top: 40px;bottom: 40px;width: 100%;
+        display: flex;align-items: center;justify-content: center;flex-flow:column;
+      }
+      .room-body img{
+        border: 5px solid #F5F1F1;
+        border-radius: 50%;
+        width: 132px;height: 132px;
+        position: relative;z-index: 12;background:transparent;
+      }
+      .room:hover img{
+        border-color: red;
+        transform: translateY(-76px) scale(0.5);
+        transition-duration: 1s;
+      }
+      .room:hover .room-text{
+        opacity: 1;
+      }
+      
+      .glyphicon{
+        cursor: pointer;
+      }
+      .glyphicon:hover{
+        color: #cccccc;
+      }
+      .glyphicon-heart:before{
+        color: red;
+      }
+      .room-text{
+        margin-left: 20px;
+        margin-right: 20px;
+        position: absolute;
+        top: 60px;
+        opacity: 0;
+        transition: opacity 1s;
+      }
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus{
+  color: #50E3C2;
+}
+
+.chatContent{
+  display: flex;
+  justify-content:space-around;
+  min-height: 100px;
+  flex-wrap: nowrap;
+}
+.chatLeft{
+  width: 60%;
+  border-radius: 3px;
+  border:1px solid #ccc;
+  min-height: 200px;
+  max-height: 500px;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.chatLeftOther{
+  display: flex;
+  flex-wrap: nowrap;
+  width: 90%;
+  padding: 5px;
+}
+.chatLeftOtherPeo{
+  min-width: 50px;
+  padding-top: 12px;
+}
+.chatLeftOtherContent{
+  background: antiquewhite;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: relative;
+}
+.chatLeftOtherContent:after{
+  content: ' ';
+  position: absolute;
+  top: 6px;
+  left: -12px;
+  z-index: 15;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-right: 14px solid antiquewhite  
+}
+
+.chatLeftOwenr{
+  display: flex;
+  flex-wrap: nowrap;
+  flex-flow: row-reverse;
+  width: 90%;
+  padding: 5px;
+  float: right;
+}
+.chatLeftOwenrPeo{
+  min-width: 50px;
+  padding-top: 12px;
+  text-align: right;
+}
+.chatLeftOwenrContent{
+  background: #d9edf7;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: relative;
+}
+.chatLeftOwenrContent:after{
+  content: ' ';
+  position: absolute;
+  top: 6px;
+  right: -12px;
+  z-index: 15;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 14px solid #d9edf7;  
+}
+
+.joinPeosDiv{
+  width: 30%;
+  border-radius: 3px;
+  border:1px solid #ccc;
+  min-height: 200px;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.joinPeoList{
+  list-style: none;
+  padding:10px;
+}
+.joinPeoList li{
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #3ab0f9;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom:5px;
+  cursor: pointer;
+}
+.sendMessageDiv{
+  display: flex;
+}
+.sendMessageBtnDiv{
+  margin-left: 10px;
+}
+
+.alert{
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 10px;
+  z-index: 11111;
+  display: none;
+}

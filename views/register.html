@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>注册</title>
+  <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
+   <!--[if lt IE 9]>
+      <script src="/public/js/html5shiv.min.js"></script>
+      <script src="/public/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+      #registerDivFooter{
+        text-align: right;
+      }
+    </style>
+</head>
+<body>
+<div class="container" >
+  <div class="panel panel-info" id="registerDiv">
+    <div class="panel-heading">注册</div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="userName">用户名：</label>
+        <input class="form-control" id="userName" value="" v-model="username" v-on:keyup.enter="register">
+      </div>
+      <div class="form-group">
+        <label for="userPwd">密码:</label>
+        <input class="form-control" type="password" id="userPwd" v-model="password" v-on:keyup.enter="register"/>
+      </div>
+       <div class="form-group">
+        <label for="userPwd">确认密码:</label>
+        <input class="form-control" type="password" id="userPwd" v-model="repassword" v-on:keyup.enter="register"/>
+      </div>
+    </div>
+    <div class="panel-footer" id="registerDivFooter">
+      <button class="btn btn-primary" v-on:click="register" id="btnSubmit">注册</button>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/public/js/jquery-1.11.1.min.js"></script>
+<script src="/public/js/bootstrap.js"></script>
+<script src="/public/js/vue.min.js"></script>
+<script>
+new Vue({
+  el:'#registerDiv',
+  data:{
+    username:'',
+    password:'',
+    repassword:''
+  },
+  methods:{
+    register:function(){
+      if(!this.username){
+        alert('用户名不能为空！');
+        return;
+      }
+      if(!this.password||!this.repassword){
+        alert('密码不能为空！');
+        return;
+      }
+      if(this.password!==this.repassword){
+        alert('密码不一致！');
+        return;
+      }
+      $.post('/user/register',{username:this.username,password:this.password},function(json){
+        if(json.error){
+          alert(json.error);
+          return;
+        }
+        window.location.assign('/login');
+      })
+    }
+  }
+})
+</script>
+</html>
